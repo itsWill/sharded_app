@@ -19,3 +19,5 @@ Note: trying to access a record that lives on the `master` database with somethi
 # Replication
 
 A thread is started in this [initializer](https://github.com/itsWill/sharded_app/blob/master/config/initializers/sharding_intializer.rb#L9-L18) and it copies over the primary to replica database as a way to mock replication. 
+
+This means that shortly after creating a record through the web form the redirect to that records show page will likely 404 until the replication process finished and copies the record over to the replica. This is fairly fast so a retry should suffice. 
