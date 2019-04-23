@@ -11,7 +11,7 @@ module Sharding
       attr_reader :shard
 
       def read(&blk)
-        if @shard = :maser
+        if shard == :master
           read_from_master(&blk)
         else
           read_from_shard(&blk)
@@ -19,7 +19,7 @@ module Sharding
       end
 
       def write(&blk)
-        if @shard = :master
+        if shard == :master
           write_to_master(&blk)
         else
           write_to_shard(&blk)
