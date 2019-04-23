@@ -5,32 +5,56 @@ module Sharding
 
       def initialize(context, options)
         super
-        @shard_id = context.shard_id
+        @shard = context.shard
       end
 
-      attr_reader :shard_id
+      attr_reader :shard
 
       def read(&blk)
-        read_from_shard(&blk)
+        if @shard = :maser
+          read_from_master(&blk)
+        else
+          read_from_shard(&blk)
+        end
       end
 
       def write(&blk)
-       write_to_shard(&blk)
+        if @shard = :master
+          write_to_master(&blk)
+        else
+          write_to_shard(&blk)
+        end
       end
 
       private
 
+      def read_from_master(&blk)
+        MasterRecord.connected_to(database: :master) do
+          instrumenter.instrument("shard_selector.raead_from_master.#{shard}") do
+            yield
+          end
+        end
+      end
+
+      def write_to_master(&blk)
+        MasterRecord.connected_to(database: :master) do
+          instrumenter.instrument("shard_selector.raead_from_master.#{shard}") do
+            yield
+          end
+        end
+      end
+
       def read_from_shard(&blk)
-        ActiveRecord::Base.connected_to(database: "shard_#{shard_id}".to_sym) do
-          instrumenter.instrument("shard_selector.read_from_shard.#{shard_id}") do
+        ActiveRecord::Base.connected_to(database: "shard_#{shard}".to_sym) do
+          instrumenter.instrument("shard_selector.read_from_shard.#{shard}") do
             yield
           end
         end
       end
 
       def write_to_shard(&blk)
-        ActiveRecord::Base.connected_to(database: "shard_#{shard_id}".to_sym) do
-          instrumenter.instrument("shard_selector.write_to_shard.#{shard_id}") do
+        ActiveRecord::Base.connected_to(database: "shard_#{shard}".to_sym) do
+          instrumenter.instrument("shard_selector.write_to_shard.#{shard}") do
             yield
           end
         end

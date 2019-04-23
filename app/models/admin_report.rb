@@ -1,0 +1,2 @@
+class AdminReport < MasterRecord
+end

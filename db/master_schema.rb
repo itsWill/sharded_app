@@ -12,6 +12,14 @@
 
 ActiveRecord::Schema.define(version: 2019_04_23_041432) do
 
+  create_table "admin_reports", force: :cascade do |t|
+    t.integer "orders_count"
+    t.integer "shops_count"
+    t.integer "products_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "orders", force: :cascade do |t|
     t.integer "shop_id"
     t.integer "product_id"

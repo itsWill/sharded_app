@@ -10,28 +10,46 @@ default: &default
   timeout: 5000
 
 development:
-  <% Sharding.shard_ids.each do |shard_id| %>
-    shard_<%= shard_id %>:
-      <<: *default
-      database: db/development_<%= shard_id %>.sqlite3
+  master:
+    <<: *default
+    database: db/development_master.sqlite3
 
-    replica_<%= shard_id %>:
-      <<: *default
-      database: db/development_replica_<%= shard_id %>.sqlite3
+  <% Sharding.shard_ids.each do |shard_id| %>
+  shard_<%= shard_id %>:
+    <<: *default
+    database: db/development_<%= shard_id %>.sqlite3
+
+  replica_<%= shard_id %>:
+    <<: *default
+    database: db/development_replica_<%= shard_id %>.sqlite3
   <% end %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <% Sharding.test_shard_ids.each do |shard_id| %>
-    shard_<%= shard_id %>:
-      <<: *default
-      database: db/test_<%= shard_id %>.sqlite3
+  master:
+    <<: *default
+    database: db/test_master.sqlite3
 
-    replica_<%= shard_id %>:
-      <<: *default
-      database: db/test_replica_<%= shard_id %>.sqlite3
+  <% Sharding.shard_ids.each do |shard_id| %>
+  shard_<%= shard_id %>:
+    <<: *default
+    database: db/development_<%= shard_id %>.sqlite3
+
+  replica_<%= shard_id %>:
+    <<: *default
+    database: db/development_replica_<%= shard_id %>.sqlite3
+  <% end %>
+
+  <% Sharding.test_shard_ids.each do |shard_id| %>
+  shard_<%= shard_id %>:
+    <<: *default
+    database: db/test_<%= shard_id %>.sqlite3
+
+  replica_<%= shard_id %>:
+    <<: *default
+    database: db/test_replica_<%= shard_id %>.sqlite3
   <% end %>
 
 production:

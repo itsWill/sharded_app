@@ -13,8 +13,8 @@ module Sharding
 
       attr_reader :headers
 
-      def shard_id
-        headers[SHARD_ID_HEADER] || 1
+      def shard
+        headers[SHARD_ID_HEADER] || :master
       end
     end
   end

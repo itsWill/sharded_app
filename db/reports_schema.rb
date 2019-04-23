@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_23_041432) do
+ActiveRecord::Schema.define(version: 2019_04_22_202826) do
+
+  create_table "admin_reports", force: :cascade do |t|
+    t.integer "orders_count"
+    t.integer "shops_count"
+    t.integer "products_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "orders", force: :cascade do |t|
     t.integer "shop_id"
@@ -37,7 +45,6 @@ ActiveRecord::Schema.define(version: 2019_04_23_041432) do
     t.text "address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "country"
   end
 
   add_foreign_key "orders", "products"
