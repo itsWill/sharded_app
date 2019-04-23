@@ -45,8 +45,8 @@ module Sharding
       end
 
       def read_from_shard(&blk)
-        ActiveRecord::Base.connected_to(database: "shard_#{shard}".to_sym) do
-          instrumenter.instrument("shard_selector.read_from_shard.#{shard}") do
+        ActiveRecord::Base.connected_to(database: "replica_#{shard}".to_sym) do
+          instrumenter.instrument("shard_selector.read_from_replica.#{shard}") do
             yield
           end
         end
